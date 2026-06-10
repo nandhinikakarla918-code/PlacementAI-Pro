@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PlacementAI Pro — AIML Portfolio Platform v3.0</title>
+
+<!-- CDN Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- App Stylesheet -->
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="noise"></div>
+<div class="bg-orbs">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="cfwrap" id="cfwrap"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-brand">
+    <div class="brand-ico">⬡</div>
+    <div>
+      <div class="brand-nm">PlacementAI</div>
+      <div class="brand-tg">Pro · v3.0</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-sec">Assessment</div>
+    <a class="nav-a on" data-p="dashboard" onclick="nav('dashboard')"><span class="nav-ico">⊞</span>Dashboard</a>
+    <a class="nav-a" data-p="profile" onclick="nav('profile')"><span class="nav-ico">◉</span>Profile</a>
+    <a class="nav-a" data-p="skills" onclick="nav('skills')"><span class="nav-ico">◎</span>Skills</a>
+    <a class="nav-a" data-p="mock" onclick="nav('mock')"><span class="nav-ico">◌</span>Mock Test</a>
+    <div class="nav-sec">AI Intelligence</div>
+    <a class="nav-a" data-p="resume" onclick="nav('resume')"><span class="nav-ico">◫</span>Resume Analyzer<span class="nav-badge nb-ai">AI</span></a>
+    <a class="nav-a" data-p="analytics" onclick="nav('analytics')"><span class="nav-ico">◧</span>Analytics<span class="nav-badge nb-ml">ML</span></a>
+    <a class="nav-a" data-p="mlmodel" onclick="nav('mlmodel')"><span class="nav-ico">⬡</span>ML Models<span class="nav-badge nb-ml">3</span></a>
+    <a class="nav-a" data-p="companies" onclick="nav('companies')"><span class="nav-ico">◩</span>Companies</a>
+    <a class="nav-a" data-p="interview" onclick="nav('interview')"><span class="nav-ico">◪</span>Interview Prep<span class="nav-badge nb-ai">AI</span></a>
+    <a class="nav-a" data-p="roadmap" onclick="nav('roadmap')"><span class="nav-ico">◬</span>Roadmap</a>
+    <div class="nav-sec">Portfolio</div>
+    <a class="nav-a" data-p="github" onclick="nav('github')"><span class="nav-ico">◭</span>GitHub Analyzer<span class="nav-badge nb-new">New</span></a>
+    <a class="nav-a" data-p="linkedin" onclick="nav('linkedin')"><span class="nav-ico">◮</span>LinkedIn Score<span class="nav-badge nb-new">New</span></a>
+    <a class="nav-a" data-p="progress" onclick="nav('progress')"><span class="nav-ico">◰</span>Progress</a>
+  </nav>
+  <div class="sb-foot">
+    <div class="ml-status"><div class="sdot"></div><span>3 ML Models · AI Active</span></div>
+  </div>
+</aside>
+
+<!-- ══════════ MOBILE TOPBAR ══════════ -->
+<header class="topbar">
+  <button class="hamburger" onclick="toggleSB()">☰</button>
+  <div class="tb-title">PlacementAI Pro</div>
+  <div class="tb-badge">AIML v3</div>
+</header>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <section id="p-dashboard" class="page on">
+    <div class="ph">
+      <div>
+        <div class="pey">Overview</div>
+        <h1 class="ptitle">Intelligence <span class="grad">Dashboard</span></h1>
+        <p class="psub">3-model ML ensemble + AI coaching + company-specific readiness. Portfolio-grade AIML platform.</p>
+      </div>
+      <div class="hact">
+        <button class="bo" onclick="nav('profile')">Update Profile</button>
+        <button class="bp" onclick="nav('analytics')">ML Analytics →</button>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-main">
+        <div class="kpi-l">Ensemble ML Probability</div>
+        <div class="kpi-rw"><canvas id="kpiRing" width="118" height="118"></canvas><div class="kpi-rc" id="kpiNum">—</div></div>
+        <div class="kpi-verdict" id="kpiVerdict">Complete profile to begin →</div>
+      </div>
+      <div class="kpi-card"><div class="kpi-ico">📝</div><div class="kpi-v" id="kpiMock">—</div><div class="kpi-l">Mock Score</div><div id="kpiMockTrend" style="font-size:10.5px;margin-top:3px;color:var(--t3)"></div></div>
+      <div class="kpi-card"><div class="kpi-ico">⚡</div><div class="kpi-v" id="kpiSkill">—</div><div class="kpi-l">Avg Skill</div></div>
+      <div class="kpi-card"><div class="kpi-ico">🏢</div><div class="kpi-v" id="kpiCo">—</div><div class="kpi-l">Companies Ready</div></div>
+      <div class="kpi-card"><div class="kpi-ico">📄</div><div class="kpi-v" id="kpiAts">—</div><div class="kpi-l">ATS Score</div></div>
+    </div>
+    <div class="dash-grid">
+      <div class="dw"><div class="wh"><div class="wt">Skill Radar</div><button class="wl" onclick="nav('skills')">Edit →</button></div><div class="chart-wrap"><canvas id="dashRadar"></canvas></div></div>
+      <div class="dw"><div class="wh"><div class="wt">Company Fit</div><button class="wl" onclick="nav('companies')">Full →</button></div><div id="dashCoList"><div class="empty">Complete profile to see company fit</div></div></div>
+      <div class="dw">
+        <div class="wt" style="margin-bottom:11px">Quick Actions</div>
+        <div class="action-grid">
+          <button class="act-btn" onclick="nav('resume')"><span class="act-ico">📄</span>Resume AI</button>
+          <button class="act-btn" onclick="nav('mock')"><span class="act-ico">📝</span>Mock Test</button>
+          <button class="act-btn" onclick="nav('interview')"><span class="act-ico">🎯</span>Interview</button>
+          <button class="act-btn" onclick="nav('github')"><span class="act-ico">🐙</span>GitHub</button>
+        </div>
+      </div>
+      <div class="dw"><div class="wh"><div class="wt">🧠 AI Insight</div><button class="wl" onclick="refreshInsight()">↻ Refresh</button></div><div class="insight-txt" id="dashInsight">Complete your profile and take a mock test to unlock personalised AI insights powered by 3 ML models.</div></div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="p-profile" class="page">
+    <div class="ph"><div><div class="pey">Step 1</div><h1 class="ptitle">Student <span class="grad">Profile</span></h1><p class="psub">14 features feed into Logistic Regression, Decision Tree, and Random Forest models.</p></div></div>
+    <div id="profileWrap"></div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="p-skills" class="page">
+    <div class="ph"><div><div class="pey">Step 2</div><h1 class="ptitle">Skill <span class="grad">Assessment</span></h1><p class="psub">Rate proficiency — ML weights shown per skill. Live radar updates as you drag.</p></div></div>
+    <div id="skillsWrap"></div>
+  </section>
+
+  <!-- MOCK TEST -->
+  <section id="p-mock" class="page">
+    <div class="ph"><div><div class="pey">Step 3</div><h1 class="ptitle">Mock <span class="grad">Test</span></h1><p class="psub">Question bank with smart deduplication — no repeated questions across attempts.</p></div></div>
+    <div id="mockWrap"></div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="p-resume" class="page">
+    <div class="ph"><div><div class="pey">AI Feature</div><h1 class="ptitle">Resume <span class="grad">Analyzer</span></h1><p class="psub">Claude AI extracts skills, projects, certifications and generates ATS + Quality scores.</p></div></div>
+    <div id="resumeWrap"></div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section id="p-analytics" class="page">
+    <div class="ph"><div><div class="pey">ML Analytics</div><h1 class="ptitle">Placement <span class="grad">Analytics</span></h1><p class="psub">Feature importance, skill gap, company comparison, and 3-model probability breakdown.</p></div></div>
+    <div id="analyticsWrap"></div>
+  </section>
+
+  <!-- ML MODELS -->
+  <section id="p-mlmodel" class="page">
+    <div class="ph"><div><div class="pey">AIML Methodology</div><h1 class="ptitle">Machine Learning <span class="grad">Models</span></h1><p class="psub">Logistic Regression vs Decision Tree vs Random Forest. Metrics, confusion matrices, feature importance.</p></div></div>
+    <div id="mlmodelWrap"></div>
+  </section>
+
+  <!-- COMPANIES -->
+  <section id="p-companies" class="page">
+    <div class="ph"><div><div class="pey">Company Intelligence</div><h1 class="ptitle">Company <span class="grad">Readiness</span></h1><p class="psub">ML model adapted per company. Skill gaps, interview patterns, personalised recommendations.</p></div></div>
+    <div id="companiesWrap"></div>
+  </section>
+
+  <!-- INTERVIEW -->
+  <section id="p-interview" class="page">
+    <div class="ph"><div><div class="pey">AI Coach</div><h1 class="ptitle">Interview <span class="grad">Preparation</span></h1><p class="psub">Large question bank. Technical, HR, behavioral, system design, and company-specific questions.</p></div></div>
+    <div id="interviewWrap"></div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="p-roadmap" class="page">
+    <div class="ph"><div><div class="pey">Action Plan</div><h1 class="ptitle">Personalised <span class="grad">Roadmap</span></h1><p class="psub">AI-generated 30/60/90-day plans based on skill gaps and target company. Export as PDF.</p></div></div>
+    <div id="roadmapWrap"></div>
+  </section>
+
+  <!-- GITHUB -->
+  <section id="p-github" class="page">
+    <div class="ph"><div><div class="pey">Portfolio Analyzer</div><h1 class="ptitle">GitHub <span class="grad">Analyzer</span></h1><p class="psub">Analyze repos, languages, contribution patterns. Get portfolio score and improvement tips.</p></div></div>
+    <div id="githubWrap"></div>
+  </section>
+
+  <!-- LINKEDIN -->
+  <section id="p-linkedin" class="page">
+    <div class="ph"><div><div class="pey">Portfolio Analyzer</div><h1 class="ptitle">LinkedIn <span class="grad">Score</span></h1><p class="psub">Analyze your LinkedIn profile completeness. Get score and section-by-section optimization.</p></div></div>
+    <div id="linkedinWrap"></div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section id="p-progress" class="page">
+    <div class="ph"><div><div class="pey">Tracking</div><h1 class="ptitle">Progress <span class="grad">Dashboard</span></h1><p class="psub">Mock test history, skill growth over time, and placement probability trend.</p></div></div>
+    <div id="progressWrap"></div>
+  </section>
+
+</main>
+
+<!-- App Script -->
+<script src="app.js"></script>
+</body>
+</html>
